@@ -1,0 +1,28 @@
+{
+  "name": "lightbug-extension",
+  "version": "0.0.1",
+  "description": "",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "dev": "vite"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "GPL-3.0-only",
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^3.1.1",
+    "@types/chrome": "^0.0.268",
+    "@types/events": "^3.0.3",
+    "svelte": "^4.2.18",
+    "svelte-preprocess": "^6.0.2",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.3",
+    "vite-plugin-static-copy": "^1.0.6"
+  },
+  "dependencies": {
+    "ethereum-provider": "^0.7.7",
+    "events": "^3.3.0",
+    "mipd": "^0.0.7"
+  }
+}
