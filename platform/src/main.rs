@@ -6,8 +6,8 @@ use embedded_graphics::{
     prelude::*,
     primitives::{PrimitiveStyleBuilder, Rectangle},
 };
-use esp_idf_hal::delay::Delay;
-use esp_idf_hal::gpio::{AnyOutputPin, PinDriver, Pull};
+use esp_idf_hal::delay::{Delay, Ets};
+use esp_idf_hal::gpio::{AnyInputPin, AnyOutputPin, PinDriver, Pull};
 use esp_idf_hal::spi::SpiDriver;
 use esp_idf_hal::spi::{self, *};
 use mipidsi::{models, Builder};
@@ -47,13 +47,13 @@ fn main() -> Result<(), EspError> {
     // let sysloop = EspSystemEventLoop::take().unwrap();
 
     // Either doesnt matter
-    let mut delay = Delay::new_default();
-    // let mut delay = Ets;
-
+    // let mut delay = Delay::new_default();
+    let mut delay = Ets;
+    // let mut delay = FreeRtos;            // FreeRTOS delay                                  
     let dc = PinDriver::input_output_od(peripherals.pins.gpio4).unwrap();
     let rst = PinDriver::input_output_od(peripherals.pins.gpio5).unwrap();
-    let sdo = peripherals.pins.gpio6;
-    let sdi = peripherals.pins.gpio7; // definitely wrong
+    let sdo = peripherals.pins.gpio7;
+    // let sdi = peripherals.pins.gpio2; // definitely wrong
 
     let driver_config = spi::SpiDriverConfig {
         dma: Dma::Disabled,
@@ -62,9 +62,9 @@ fn main() -> Result<(), EspError> {
 
     let spi = SpiDriver::new(
         peripherals.spi2,
-        peripherals.pins.gpio14, // sclk
+        peripherals.pins.gpio6, // sclk
         sdo, // mosi
-        Some(sdi), // miso
+        None::<AnyInputPin>, // miso
         &driver_config,
     )?;
 
