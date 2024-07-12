@@ -6,7 +6,7 @@ use embedded_graphics::{
     prelude::*,
     primitives::{PrimitiveStyleBuilder, Rectangle},
 };
-use esp_idf_hal::delay::{Delay, Ets};
+use esp_idf_hal::delay::Ets;
 use esp_idf_hal::gpio::{AnyInputPin, AnyOutputPin, PinDriver, Pull};
 use esp_idf_hal::spi::SpiDriver;
 use esp_idf_hal::spi::{self, *};
@@ -49,11 +49,10 @@ fn main() -> Result<(), EspError> {
     // Either doesnt matter
     // let mut delay = Delay::new_default();
     let mut delay = Ets;
-    // let mut delay = FreeRtos;            // FreeRTOS delay                                  
+    // let mut delay = FreeRtos;            // FreeRTOS delay
     let dc = PinDriver::input_output_od(peripherals.pins.gpio4).unwrap();
     let rst = PinDriver::input_output_od(peripherals.pins.gpio5).unwrap();
     let sdo = peripherals.pins.gpio7;
-    // let sdi = peripherals.pins.gpio2; // definitely wrong
 
     let driver_config = spi::SpiDriverConfig {
         dma: Dma::Disabled,
@@ -63,12 +62,13 @@ fn main() -> Result<(), EspError> {
     let spi = SpiDriver::new(
         peripherals.spi2,
         peripherals.pins.gpio6, // sclk
-        sdo, // mosi
-        None::<AnyInputPin>, // miso
+        sdo,                    // mosi
+        None::<AnyInputPin>,    // miso
         &driver_config,
     )?;
 
     let config = spi::SpiConfig {
+        // write_only: true,
         ..Default::default()
     };
 
