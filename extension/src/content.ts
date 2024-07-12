@@ -1,85 +1,84 @@
 import icon from '../public/icons/injected.svg';
+import EthereumProvider from 'ethereum-provider';
 import { EventEmitter } from 'events';
 
 console.log('LightBug content script loaded');
 
-/// <reference types="vite/client" />
-interface EIP6963ProviderInfo {
-    walletId: string;
-    uuid: string;
-    name: string;
-    icon: string;
-}
-
-// Represents the structure of an Ethereum provider based on the EIP-1193 standard.
-interface IEIP1193Provider {
-    isStatus?: boolean;
-    host?: string;
-    path?: string;
-    sendAsync?: (request: { method: string, params?: Array<unknown> }, callback: (error: Error | null, response: unknown) => void) => void
-    send?: (request: { method: string, params?: Array<unknown> }, callback: (error: Error | null, response: unknown) => void) => void
-    request: (request: { method: string, params?: Array<unknown> }) => Promise<unknown>
-}
-
-interface EIP6963ProviderDetail {
-    info: EIP6963ProviderInfo;
-    provider: IEIP1193Provider;
-}
-
-// This type represents the structure of an event dispatched by a wallet to announce its presence based on EIP-6963.
-type EIP6963AnnounceProviderEvent = {
-    detail: {
-        info: EIP6963ProviderInfo,
-        provider: IEIP1193Provider
-    }
-}
-
-// let provider = createProvider();
-// @ts-ignore
-// let provider = null;
+// let provider = null;    
 // let provider = new Proxy({}, {
 //     get: (target, prop) => {
 //         console.log("LightBug provider get", prop);
 //         // return target[prop];
 //     },
-// })
+// });
 
-// const x: IEIP1193Provider = {
-//     async request(request) {
-//         console.log("LightBug provider request", request);
-//     },
-//     on: (event, listener) => {
-//         console.log("LightBug provider on", event, listener);
-//     }                           
-// }
 
-// // var provider: IEIP1193Provider = new Proxy({}, {
-// //     get: (target, prop) => {
-// //         console.log("LightBug provider get", prop);
-// //     }
-// // });
-let provider = null;    
+class Connection extends EventEmitter {
+    constructor() {
+        super()
+
+        window.addEventListener('message', (event) => {
+            if (event && event.source === window && event.data) {
+                const { type } = event.data
+
+                if (type === 'eth:payload') {
+                    this.emit('payload', event.data.payload)
+                }
+
+                if (type === 'eth:event') {
+                    this.emit(event.data.event, ...event.data.args)
+                }
+            }
+        })
+
+        setTimeout(() => this.emit('connect'), 0)
+    }
+
+    send(payload) {
+        window.postMessage({ type: 'eth:send', payload }, window.location.origin)
+    }
+}
+
+class ExtensionProvider extends EthereumProvider {
+    // override the send method in order to add a flag that identifies messages
+    // as "connection messages", meaning Frame won't track an origin that sends
+    // these requests
+    doSend(method, params, targetChain, waitForConnection) {
+        // if (!waitForConnection && (method === 'eth_chainId' || method === 'net_version')) {
+        //     const payload = { jsonrpc: '2.0', id: this.nextId++, method, params, __extensionConnecting: true }
+        //     return new Promise((resolve, reject) => {
+        //         this.promises[payload.id] = { resolve, reject, method }
+        //         this.connection.send(payload)
+        //     })
+        // }
+
+        console.log("LightBug provider send", method, params, targetChain, waitForConnection);
+        // return super.doSend(method, params, targetChain, waitForConnection)
+    }
+}
+
+let provider = new ExtensionProvider(new Connection());
 
 // @ts-ignore
 // window.ethereum = provider;
 
 console.log({ provider });
 
-var info = {
+let info = {
     uuid: "d85812f6-2258-47e4-bddf-08b5f882579d",
     name: "LightBug",
     icon,
     rdns: "eth.lightbug.wallet"
 };
 
-var detail = Object.freeze({
+let detail = Object.freeze({
     info,
     provider
 });
 
 console.log({ detail });
 
-var publishProvider = () => {
+let publishProvider = () => {
     try {
         console.log("LightBug dispatching 'eip6963:announceProvider' event");
         var event = new CustomEvent('eip6963:announceProvider', {
