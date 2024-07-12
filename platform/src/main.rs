@@ -50,10 +50,10 @@ fn main() -> Result<(), EspError> {
     let mut delay = Delay::new_default();
     // let mut delay = Ets;
 
-    let rst = PinDriver::input_output_od(peripherals.pins.gpio5).unwrap();
     let dc = PinDriver::input_output_od(peripherals.pins.gpio4).unwrap();
+    let rst = PinDriver::input_output_od(peripherals.pins.gpio5).unwrap();
     let sdo = peripherals.pins.gpio6;
-    let sdi = peripherals.pins.gpio2;
+    let sdi = peripherals.pins.gpio7; // definitely wrong
 
     let driver_config = spi::SpiDriverConfig {
         dma: Dma::Disabled,
@@ -63,8 +63,8 @@ fn main() -> Result<(), EspError> {
     let spi = SpiDriver::new(
         peripherals.spi2,
         peripherals.pins.gpio14, // sclk
-        sdo,                     // mosi
-        Some(sdi),               // miso
+        sdo, // mosi
+        Some(sdi), // miso
         &driver_config,
     )?;
 
@@ -95,6 +95,15 @@ fn main() -> Result<(), EspError> {
     let mut button1 = PinDriver::input(peripherals.pins.gpio10).unwrap();
     button1.set_pull(Pull::Up).unwrap();
 
+    let mut button2 = PinDriver::input(peripherals.pins.gpio8).unwrap();
+    button2.set_pull(Pull::Up).unwrap();
+
+    let mut button3 = PinDriver::input(peripherals.pins.gpio3).unwrap();
+    button3.set_pull(Pull::Up).unwrap();
+
+    let mut button4 = PinDriver::input(peripherals.pins.gpio2).unwrap();
+    button4.set_pull(Pull::Up).unwrap();
+
     let led_pin = peripherals.pins.gpio9;
     let channel = peripherals.rmt.channel0;
 
@@ -112,7 +121,16 @@ fn main() -> Result<(), EspError> {
 
         // check button 1
         if button1.is_low() {
-            log::info!("Button 1 pressed!");
+            log::info!("[keypress] btn 1");
+        }
+        if button2.is_low() {
+            log::info!("[keypress] btn 2");
+        }
+        if button3.is_low() {
+            log::info!("[keypress] btn 3");
+        }
+        if button4.is_low() {
+            log::info!("[keypress] btn 4");
         }
 
         FreeRtos::delay_ms(100);
