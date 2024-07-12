@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
-import { viteStaticCopy } from 'vite-plugin-static-copy';
-import sveltePreprocess from 'svelte-preprocess';
+import { sveltePreprocess } from 'svelte-preprocess';
+import { crx } from '@crxjs/vite-plugin'
+import manifest from './manifest.json'
 
 export default defineConfig({
   plugins: [
@@ -10,34 +11,15 @@ export default defineConfig({
         typescript: true,
       }),
     }),
-    viteStaticCopy({
-      targets: [
-        {
-          src: 'manifest.json',
-          dest: '.'
-        },
-        {
-          src: 'public/icons',
-          dest: '.'
-        }
-      ]
-    })
+    crx({
+      manifest,
+    }),
   ],
-  build: {
-    outDir: 'dist',
-    rollupOptions: {
-      input: {
-        popup: 'html/popup.html',
-        options: 'html/options.html',
-        background: 'src/background.ts',
-        content: 'src/content.ts',
-      },
-      output: {
-        entryFileNames: chunk => {
-          // return chunk.name === 'background' ? 'background.js' : '[name].js';
-          return ['background', 'content'].includes(chunk.name) ? chunk.name + '.js' : '[name].js';
-        }
-      }
-    }
-  }
+  server: {
+    port: 5173,
+    strictPort: true,
+    hmr: {
+      clientPort: 5173,
+    },
+  },
 });

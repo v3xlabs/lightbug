@@ -15,13 +15,13 @@
         }
     },
     "background": {
-        "service_worker": "background.js"
+        "service_worker": "src/background.ts"
     },
     "options_page": "html/options.html",
     "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "js": ["src/content.ts"]
     }
   ]
 }
