@@ -17,7 +17,7 @@
     "background": {
         "service_worker": "src/background.ts"
     },
-    "options_page": "html/options.html",
+    "options_page": "html/setup.html",
     "content_scripts": [
     {
       "matches": ["<all_urls>"],

@@ -20,12 +20,26 @@
         console.log("Received device info", response);
         message = JSON.stringify(response);
     });
+
+
+    async function pairFireFly() {
+        let port = await navigator.serial.requestPort().catch((err) => {
+            alert("Error: " + err);
+        });
+
+        if (port) {
+            alert("Successfully connected to " + port.getInfo().usbProductId);
+        }
+    }
 </script>
 
 <main class="p-8 min-w-96 bg-[#FEF9ED] h-screen flex flex-col">
     <p>
         Serial status: {$serialManagerStatus}
     </p>
+
+    <!-- <button on:click={pairFireFly}>Pair FireFly</button> -->
+    <a href={chrome.runtime.getURL("html/options.html")} target="_blank">Options</a>
     {#if $serialManagerStatus === "disconnected"}
         <div class="my-auto">
             <h1 class="text-4xl my-2">Please select a device</h1>
