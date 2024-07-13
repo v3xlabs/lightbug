@@ -1,6 +1,6 @@
 import { EventEmitter } from 'events';
 import { createStore } from 'mipd';
-import { Address } from 'viem';
+import type { Address } from 'viem';
 
 export class LBProvider extends EventEmitter {
     constructor() {
