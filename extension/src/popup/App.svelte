@@ -11,9 +11,11 @@
 <main class="p-8 min-w-96 bg-yellow-100">
     {#if $page === "intro"}
         <h1 class="text-2xl">Welcome to Lightbug</h1>
-        <button on:click={()=>{
-            page.set("choose-device")
-        }}>Next</button>
+        <button
+            on:click={() => {
+                page.set("choose-device");
+            }}>Next</button
+        >
     {:else if $page === "choose-device"}
         <h1 class="text-2xl">Choose your device</h1>    
         <button on:click={()=>{
@@ -21,16 +23,26 @@
         }}>Next</button>
     {:else if $page === "choose-wallet"}
         <h1 class="text-2xl">Choose your wallet</h1>
-        <button on:click={()=>{
-            page.set("wallet-page")
-        }}>Next</button>
+        <button
+            on:click={() => {
+                page.set("wallet-page");
+            }}>Next</button
+        >
     {:else if $page === "wallet-page"}
         <Portfolio />
     {/if}
 </main>
 
 <style>
-    :global(body) {
-        min-width: 300px;
+    :global(html) {
+        width: 500px;
+        height: 500px;
+        background-color: #f5f5f5;
+        min-width: 500px; /* your desired width */
+        max-width: 100%;
+        min-height: 500px; /* your desired height */
+        max-height: 100%;
+        position: relative;
+        vertical-align: middle;
     }
 </style>
