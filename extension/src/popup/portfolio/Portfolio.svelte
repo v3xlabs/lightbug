@@ -24,7 +24,6 @@
     <h1 class="text-2xl">Portfolio</h1>
 
     <ul>
-        
             <!-- This displays amount of ether -->
             <li class="border border-neutrla-400 p-2 my-2 rounded-lg w-full">Ethereum (amount) - {#await balance then balance1}{parseFloat(formatEther(balance1)).toFixed(2)}{/await}</li>
         
