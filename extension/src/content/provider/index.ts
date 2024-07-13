@@ -34,7 +34,7 @@ export class LBProvider extends EventEmitter {
                     };
 
                     // wait for either event or timeout
-                    const timeout = 10; // 5 minutes
+                    const timeout = 5 * 60; // 5 minutes
                     const timeout_handle = setTimeout(() => {
                         // timeout
                         window.removeEventListener('message', v);

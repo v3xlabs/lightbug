@@ -14,6 +14,10 @@ use mipidsi::{models, Builder};
 
 use esp_idf_hal::{delay::FreeRtos, peripherals::Peripherals};
 use esp_idf_sys::*;
+use smart_leds::colors::{GREEN, RED};
+use smart_leds::hsv::{hsv2rgb, Hsv};
+use smart_leds::RGB;
+use ws2812_esp32_rmt_driver::Ws2812Esp32Rmt;
 
 /**
  * Pin Mapping
@@ -107,9 +111,15 @@ fn main() -> Result<(), EspError> {
     let led_pin = peripherals.pins.gpio9;
     let channel = peripherals.rmt.channel0;
 
-    // let mut ws2812 = Ws2812Esp32Rmt::new(channel, led_pin).unwrap();
+    let mut ws2812 = Ws2812Esp32Rmt::new(channel, led_pin).unwrap();
 
     // let mut hue = unsafe { esp_random() } as u8;
+    let pixels = vec![0x00, 0x00, 0x00, 0x00];
+    let red = hsv2rgb(Hsv {hue: 0, sat:255, val: 255});
+    let green = hsv2rgb(Hsv {hue: 120, sat:255, val: 255});
+    let off = hsv2rgb(Hsv {hue: 0, sat:0, val: 0});
+
+    let mut pixels = vec![off, off, off, off];
     loop {
         // let pixels = std::iter::repeat(hsv2rgb(Hsv {
         //     hue,
@@ -118,20 +128,29 @@ fn main() -> Result<(), EspError> {
         // }))
         // .take(25);
         // ws2812.write_nocopy(pixels).unwrap();
-
         // check button 1
+        let mut pixels = vec![off.clone(), off.clone(), off.clone(), off.clone()];
         if button1.is_low() {
             log::info!("[keypress] btn 1");
+            // pixels[0] = red.de.clone();
+            pixels[0] = RED;
         }
         if button2.is_low() {
             log::info!("[keypress] btn 2");
+            // pixels[1] = red.clone();
+            pixels[1] = GREEN;
         }
         if button3.is_low() {
             log::info!("[keypress] btn 3");
+            // pixels[2] = red.clone();
+            pixels[2] = GREEN;
         }
         if button4.is_low() {
             log::info!("[keypress] btn 4");
+            // pixels[3] = red.clone();
+            pixels[3] = GREEN;
         }
+        ws2812.write_nocopy(pixels).unwrap();
 
         FreeRtos::delay_ms(100);
 
