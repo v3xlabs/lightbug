@@ -7,7 +7,7 @@
     import { serialManagerStatus } from "./SerialManager";
 </script>
 
-<main class="p-8 min-w-96 h-screen flex flex-col">
+<main class="w-full h-full overflow-y-auto flex flex-col">
     {#if $serialManagerStatus === "disconnected"}
         <div class="my-auto">
             <h1 class="text-2xl my-2">Connect your FireFly</h1>
