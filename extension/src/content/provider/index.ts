@@ -1,9 +1,11 @@
 import { EventEmitter } from 'events';
-import icon from '../../../public/icons/injected.svg';
-import { createStore, announceProvider } from 'mipd';
+import { createStore } from 'mipd';
 
-export class LBProvider {
+export class LBProvider extends EventEmitter {
     constructor() {
+        console.log('LBProvider constructor called');
+        super();
+
         this.isMock = true;
         this.chainId = '0x1'; // Mainnet
         this.accounts = ['0x0000000000000000000000000000000000000000']; // Mock account
