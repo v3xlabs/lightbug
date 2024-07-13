@@ -28,11 +28,6 @@ export class LBProvider {
     async enable() {
         return this.accounts;
     }
-
-    public on(event: any, listener: (...args: unknown[]) => void): this {
-        // this.addEventListener(event, listener);
-        return this;
-    }
 }
 
 // Initialize the MIPD store
