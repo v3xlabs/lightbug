@@ -7,9 +7,9 @@
     import { serialManagerStatus } from "./SerialManager";
 </script>
 
-<main class="w-full h-full overflow-y-auto flex flex-col">
+<main class="w-[420px] h-[420px] overflow-y-auto flex flex-col">
     {#if $serialManagerStatus === "disconnected"}
-        <div class="my-auto">
+        <div class="my-auto p-8">
             <h1 class="text-2xl my-2">Connect your FireFly</h1>
             <p class="text-base mb-4">
                 Your browser must support WebSerial to be able to communicate

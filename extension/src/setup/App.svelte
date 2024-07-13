@@ -1,6 +1,7 @@
 <script lang="ts">
     import "../app.css";
     import GoLink from "svelte-icons/go/GoLink.svelte";
+    import GoQuestion from "svelte-icons/go/GoQuestion.svelte";
 
     import { serialManager, serialManagerStatus } from "../popup/SerialManager";
 
@@ -35,6 +36,31 @@
                 Or if it's already connected, try pairing it by clicking the
                 button below
             </p>
+
+            <div class="py-4">
+                <div class="border rounded-md w-full p-4">
+                    <div class="bg-white p-4 rounded-md border border-gray-200 space-y-2">
+                        <div>
+                            LightBug wants to connect to a serial port
+                        </div>
+                        <div class="border bg-gray-200 aspect-square">
+                            <div class="px-4 py-2 bg-blue-500 text-black">
+                                USB JTAG/serial debug unit (ttyACM0)
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div class="w-4 h-4">
+                                <GoQuestion />
+                            </div>
+                            <div class="flex gap-2 items-stretch">
+                                <div class="border border-blue-500 px-4 py-2 text-blue-500 rounded-3xl">Cancel</div>
+                                <div class="bg-blue-500 px-4 py-2 rounded-3xl text-white">Connect</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <button
                 on:click={pairFireFly}
                 class="px-4 py-2 bg-purple-800 text-white rounded-lg"
