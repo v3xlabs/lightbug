@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "ethereum-provider": "^0.7.7",
+    "eventemitter3": "^5.0.1",
     "events": "^3.3.0",
     "mipd": "^0.0.7",
     "viem": "^2.17.3"
