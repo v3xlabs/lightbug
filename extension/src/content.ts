@@ -2,6 +2,7 @@ import providerInjectorPath from "./content/inject.ts?script&module";
 
 console.log("LightBug content script loaded");
 
+// Inject the provider script
 function injectScript(scriptPath: string) {
     const container = document.head || document.documentElement;
     const script = document.createElement("script");
@@ -12,5 +13,19 @@ function injectScript(scriptPath: string) {
     container.insertBefore(script, container.children[0]);
     container.removeChild(script);
 }
+
+// Listen for messages from the provider
+window.addEventListener('message', (event) => {
+    // We only accept messages from ourselves
+    if (event.source != window) {
+        return;
+    }
+    
+    if (event.data.action && event.data.action === 'openPopup') {
+        console.log('got openPopup message');
+        // Send a message to the background script
+        chrome.runtime.sendMessage({ action: 'openPopup' });
+    }
+}, false);
 
 injectScript(providerInjectorPath);
