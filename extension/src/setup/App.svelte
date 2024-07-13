@@ -1,4 +1,6 @@
 <script lang="ts">
+    import { serialManagerStatus } from '../popup/SerialManager';
+
     let setting: string = "default setting";
 
     async function pairFireFly() {
@@ -13,8 +15,8 @@
 </script>
 
 <main>
-    <h1>Options Page</h1>
-    <p>Current setting: {setting}</p>
+    <h1>Setup Page</h1>
+    <p>Current Serial Status: {$serialManagerStatus}</p>
 
     <button on:click={pairFireFly}>Pair FireFly</button>
 </main>

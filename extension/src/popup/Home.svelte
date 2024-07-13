@@ -9,8 +9,6 @@
     const addresses = ["0x8F8f07b6D61806Ec38febd15B07528dCF2903Ae7"];
 
     // intro > choose-device > choose wallet > wallet page
-    type pages = "intro" | "choose-device" | "choose-wallet" | "wallet-page";
-    const page = writable<pages>("choose-wallet");
 
     import "../app.css";
 
@@ -21,16 +19,6 @@
         message = JSON.stringify(response);
     });
 
-
-    async function pairFireFly() {
-        let port = await navigator.serial.requestPort().catch((err) => {
-            alert("Error: " + err);
-        });
-
-        if (port) {
-            alert("Successfully connected to " + port.getInfo().usbProductId);
-        }
-    }
 </script>
 
 <main class="p-8 min-w-96 bg-[#FEF9ED] h-screen flex flex-col">
@@ -38,8 +26,10 @@
         Serial status: {$serialManagerStatus}
     </p>
 
+    <a href="#/wallets" class="px-4 py-2 bg-purple-800 text-white rounded-lg">Wallets</a>
+
     <!-- <button on:click={pairFireFly}>Pair FireFly</button> -->
-    <a href={chrome.runtime.getURL("html/options.html")} target="_blank">Options</a>
+    <!-- <a href={chrome.runtime.getURL("html/options.html")} target="_blank">Options</a>
     {#if $serialManagerStatus === "disconnected"}
         <div class="my-auto">
             <h1 class="text-4xl my-2">Please select a device</h1>
@@ -69,5 +59,5 @@
     {:else if $page === "choose-wallet"}
         <h1 class="text-2xl">Choose your wallet</h1>
         <Wallets {addresses} />
-    {/if}
+    {/if} -->
 </main>

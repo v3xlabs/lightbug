@@ -1,5 +1,5 @@
 <script lang="ts">
-    export let addresses: string[] = [];
+    let addresses: string[] = ["0x8F8f07b6D61806Ec38febd15B07528dCF2903Ae7"];
     import {formatAddress} from "ens-tools"
     // const getData = async () => {
     //     const url = new URL("https://enstate.rs/bulk/a");
@@ -15,6 +15,8 @@
     // let data = getData();
     // console.log(data);
 </script>
+
+<h1 class="text-2xl">Choose your wallet</h1>
 
 <ul>
     <!-- {#await data}

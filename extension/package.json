@@ -29,6 +29,7 @@
     "ethereum-provider": "^0.7.7",
     "events": "^3.3.0",
     "mipd": "^0.0.7",
+    "svelte-spa-router": "^4.0.1",
     "viem": "^2.17.3"
   }
 }
