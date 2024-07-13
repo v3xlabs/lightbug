@@ -33,18 +33,19 @@ export class LBProvider extends EventEmitter {
                             console.log('wallet selected', event.data);
                             window.removeEventListener('message', v);
                             clearTimeout(timeout_handle);
-                            resolve(['0x0000000000000000000000000000000000000000'])
+                            resolve(['0x1234000000000000000000000000000000000000'])
                         }
                     };
 
                     // wait for either event or timeout
-                    const timeout = 5 * 60; // 5 minutes
+                    const timeout = 1 * 60 * 1000; // 5 minutes
                     const timeout_handle = setTimeout(() => {
                         // timeout
+                        console.log('timeout');
                         window.removeEventListener('message', v);
-                        // resolve([]);
+                        resolve([]);
                         // TODO: remove this
-                        resolve(['0x0000000000000000000000000000000000000000'])
+                        // resolve(['0x0000000000000000000000000000000000000000'])
                     }, timeout);
                     window.addEventListener('message', v);
                 });

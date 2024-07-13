@@ -27,4 +27,14 @@ window.addEventListener('message', (event) => {
     }
 }, false);
 
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    console.log('Background got message', request);
+    if (!request?.action.startsWith('lb_')) return;
+
+    if (request.action === 'lb_wallet_selected') {
+        console.log('requestInfo called', sender, request, sendResponse);
+        window.postMessage(request.action, '*');
+        }
+});
+
 injectScript(providerInjectorPath);

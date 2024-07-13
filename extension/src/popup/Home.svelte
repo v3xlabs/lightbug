@@ -1,13 +1,8 @@
 <script lang="ts">
     import { formatAddress } from "ens-tools";
     import "../app.css";
-    import { serialManager, serialManagerStatus } from "./SerialManager";
     import clsx from "clsx";
     import { activeWallet } from './DeviceConnector';
-
-    // const wallet = "0x225f137127d9067788314bc7fcc1f36746a3c3B5";
-    // const wallet = "0xd577D1322cB22eB6EAC1a008F62b18807921EFBc";
-    // const wallet = "0x8F8f07b6D61806Ec38febd15B07528dCF2903Ae7";
 
     let profile:
         | undefined
@@ -22,10 +17,7 @@
 
     $: fetchENS($activeWallet).then(console.log);
 
-    // chrome.runtime.sendMessage({ action: "lb_request_device" }, (response) => {
-    //     console.log("Received device info", response);
-    //     // message = JSON.stringify(response);
-    // });
+    chrome.runtime.sendMessage({ action: "lb_request_device", addresses: [activeWallet] });
 </script>
 
 <main class="p-8 min-w-96 bg-[#FEF9ED] h-screen flex flex-col relative">
