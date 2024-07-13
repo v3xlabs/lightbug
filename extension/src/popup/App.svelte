@@ -17,10 +17,12 @@
             }}>Next</button
         >
     {:else if $page === "choose-device"}
-        <h1 class="text-2xl">Choose your device</h1>    
-        <button on:click={()=>{
-            page.set("choose-wallet")
-        }}>Next</button>
+        <h1 class="text-2xl">Choose your device</h1>
+        <button
+            on:click={() => {
+                page.set("choose-wallet");
+            }}>Next</button
+        >
     {:else if $page === "choose-wallet"}
         <h1 class="text-2xl">Choose your wallet</h1>
         <button
@@ -35,12 +37,12 @@
 
 <style>
     :global(html) {
-        width: 500px;
-        height: 500px;
+        width: 420px;
+        height: 420px;
         background-color: #f5f5f5;
-        min-width: 500px; /* your desired width */
+        min-width: 420px;
         max-width: 100%;
-        min-height: 500px; /* your desired height */
+        min-height: 420px;
         max-height: 100%;
         position: relative;
         vertical-align: middle;
