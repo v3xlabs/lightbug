@@ -27,6 +27,7 @@
     </p>
 
     <a href="#/wallets" class="px-4 py-2 bg-purple-800 text-white rounded-lg">Wallets</a>
+    <a href="#/portfolio" class="px-4 py-2 bg-purple-800 text-white rounded-lg">Portfolio</a>
 
     <!-- <button on:click={pairFireFly}>Pair FireFly</button> -->
     <!-- <a href={chrome.runtime.getURL("html/options.html")} target="_blank">Options</a>
