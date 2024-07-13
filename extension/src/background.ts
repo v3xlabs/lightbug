@@ -9,7 +9,9 @@ chrome.runtime.onInstalled.addListener(async () => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log('Background got message', request);
-    if (request.action === 'openPopup') {
+    if (!request?.action.startsWith('lb_')) return;
+
+    if (request.action === 'lb_open_wallet') {
         console.log('openPopup called', sender, request, sendResponse);
 
         // @ts-ignore
@@ -21,7 +23,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }, 1000);
     }
 
-    if (request.action === 'requestInfo') {
+    if (request.action === 'lb_request_device') {
         console.log('requestInfo called', sender, request, sendResponse);
         sendResponse({ action: 'updatePopup', payloda: 'txt' });
     }

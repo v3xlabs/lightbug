@@ -12,8 +12,8 @@
 
     let message = "hello";  
     
-    chrome.runtime.sendMessage({ action: "requestInfo", lightbug: true }, (response) => {
-        console.log("Popup Info got response", response);
+    chrome.runtime.sendMessage({ action: "lb_request_device" }, (response) => {
+        console.log("Received device info", response);
         message = JSON.stringify(response);
     });
 </script>

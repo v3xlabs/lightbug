@@ -20,11 +20,10 @@ window.addEventListener('message', (event) => {
     if (event.source != window) {
         return;
     }
-    
-    if (event.data.action && event.data.action === 'openPopup') {
-        console.log('got openPopup message');
-        // Send a message to the background script
-        chrome.runtime.sendMessage({ action: 'openPopup' });
+
+    if (event.data.action && event.data.action.startsWith('lb_')) {
+        console.log('got message', event.data.action);
+        chrome.runtime.sendMessage(event.data);
     }
 }, false);
 

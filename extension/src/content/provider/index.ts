@@ -1,5 +1,6 @@
 import { EventEmitter } from 'events';
 import { createStore } from 'mipd';
+import { Address } from 'viem';
 
 export class LBProvider extends EventEmitter {
     constructor() {
@@ -19,9 +20,29 @@ export class LBProvider extends EventEmitter {
             case 'eth_requestAccounts':
                 console.log('eth_requestAccounts called');
                 // artificial 5 second wait
-                window.postMessage({ action: 'openPopup', isLightBug: true }, '*');
-                await new Promise(resolve => setTimeout(resolve, 5000));
-                this.accounts = ['0x0000000000000000000000000000000000000000']; // Mock account
+                window.postMessage({ action: 'lb_open_wallet' }, '*');
+
+                this.accounts = await new Promise<string[]>((resolve) => {
+                    // TODO: wait for device info and wallet selection
+                    const v = (event) => {
+                        if (event.data.action === 'lb_wallet_selected') {
+                            console.log('wallet selected', event.data);
+                            window.removeEventListener('message', v);
+                            clearTimeout(timeout_handle);
+                            resolve(['0x0000000000000000000000000000000000000000'])
+                        }
+                    };
+
+                    // wait for either event or timeout
+                    const timeout = 10; // 5 minutes
+                    const timeout_handle = setTimeout(() => {
+                        // timeout
+                        window.removeEventListener('message', v);
+                        resolve([]);
+                    }, timeout);
+                    window.addEventListener('message', v);
+                });
+
                 return this.accounts;
             case 'eth_chainId':
                 console.log('eth_chainId called');
