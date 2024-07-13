@@ -21,7 +21,10 @@
     "svelte-preprocess": "^6.0.2",
     "typescript": "^5.5.3",
     "vite": "^5.3.3",
-    "vite-plugin-static-copy": "^1.0.6"
+    "vite-plugin-static-copy": "^1.0.6",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4"
   },
   "dependencies": {
     "ethereum-provider": "^0.7.7",

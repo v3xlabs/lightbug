@@ -1,19 +1,24 @@
 <script lang="ts">
-    let name: string = "world";
+    import { writable } from "svelte/store";
+
+    const connected = false;
+    const page = writable("main");
 </script>
 
-<main>
-    <h1>Hello {name}!</h1>
+<main class="p-8">
+    {#if $page === "main"}
+        <h1 class="text-4xl">Lightbug</h1>
+        {#if connected}
+            <p>Connected</p>
+        {:else}
+            <p>Ready to connect</p>
+            <button
+                on:click={() => {
+                    $page = "flash";
+                }}>or flash a new device</button
+            >
+        {/if}
+    {:else if $page === "flash"}
+        Connect your device to flash it
+    {/if}
 </main>
-
-<style>
-    main {
-        text-align: center;
-        padding: 1em;
-        margin: 0 auto;
-    }
-    h1 {
-        color: #ff3e00;
-        font-size: 4em;
-    }
-</style>
