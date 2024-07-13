@@ -101,6 +101,15 @@ class SerialManager {
         }
     }
 
+    public async unpair() {
+        if (this._port === null) {
+            throw new Error("Serial port not initialized");
+        }
+
+        await this._port.forget();
+        this.removePort();
+    }
+
     public get port() {
         // if (this._port === null) {
         //     throw new Error('Serial port not initialized');

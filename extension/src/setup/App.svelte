@@ -8,6 +8,10 @@
     async function pairFireFly() {
         await serialManager.request();
     }
+
+    async function unpairFireFly() {
+        await serialManager.unpair();
+    }
 </script>
 
 <main>
@@ -36,7 +40,7 @@
             <p>
                 You can now close this window and continue using the extension.
             </p>
-            <button class="bg-purple-500 px-4 py-1">Disconnect</button>
+            <button class="bg-purple-500 px-4 py-1" on:click={unpairFireFly}>Disconnect</button>
         </div>
     {/if}
 </main>
