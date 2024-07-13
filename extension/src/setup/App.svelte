@@ -1,24 +1,44 @@
 <script lang="ts">
-    import { serialManagerStatus } from '../popup/SerialManager';
+    import "../app.css";
+
+    import { serialManager, serialManagerStatus } from "../popup/SerialManager";
 
     let setting: string = "default setting";
 
     async function pairFireFly() {
-        let port = await navigator.serial.requestPort().catch((err) => {
-            alert("Error: " + err);
-        });
-
-        if (port) {
-            alert("Successfully connected to " + port.getInfo().usbProductId);
-        }
+        await serialManager.request();
     }
 </script>
 
 <main>
-    <h1>Setup Page</h1>
+    <h1></h1>
     <p>Current Serial Status: {$serialManagerStatus}</p>
 
-    <button on:click={pairFireFly}>Pair FireFly</button>
+    {#if $serialManagerStatus === "disconnected"}
+        <div class="my-auto">
+            <h1 class="text-3xl my-2">Connect your FireFly to continue</h1>
+
+            <!-- or if it's already connected, try pairing it -->
+            <p class="text-lg mb-2">
+                Or if it's already connected, try pairing it by clicking the
+                button below
+            </p>
+            <button
+                on:click={pairFireFly}
+                class="px-4 py-2 bg-purple-800 text-white rounded-lg"
+            >
+                Connect FireFly
+            </button>
+        </div>
+    {:else}
+        <div class="p-4 bg-green-500 rounded-lg w-fit mx-auto">
+            <div>You are good to go!</div>
+            <p>
+                You can now close this window and continue using the extension.
+            </p>
+            <button class="bg-purple-500 px-4 py-1">Disconnect</button>
+        </div>
+    {/if}
 </main>
 
 <style>

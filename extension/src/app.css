@@ -3,13 +3,5 @@
 @tailwind utilities;
 
 html, body {
-    width: 420px;
-    height: 420px;
     background-color: #FEF9ED;
-    min-width: 420px;
-    max-width: 100%;
-    min-height: 420px;
-    max-height: 100%;
-    position: relative;
-    vertical-align: middle;
 }
