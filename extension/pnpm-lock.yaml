@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       ens-tools:
         specifier: ^0.0.14
         version: 0.0.14(@wagmi/core@0.10.17(ethers@5.7.2)(react@18.3.1)(typescript@5.5.3))(ethers@5.7.2)(react@18.3.1)(swr@2.2.5(react@18.3.1))(wagmi@0.12.19(ethers@5.7.2)(react@18.3.1)(typescript@5.5.3))
@@ -1066,6 +1069,10 @@ packages:
 
   clsx@1.2.1:
     resolution: {integrity: sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==}
+    engines: {node: '>=6'}
+
+  clsx@2.1.1:
+    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
 
   code-red@1.0.4:
@@ -3860,6 +3867,8 @@ snapshots:
       wrap-ansi: 6.2.0
 
   clsx@1.2.1: {}
+
+  clsx@2.1.1: {}
 
   code-red@1.0.4:
     dependencies:

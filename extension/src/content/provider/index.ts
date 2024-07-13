@@ -5,17 +5,17 @@ import type { Address } from 'viem';
 let PROVIDER: LBProvider;
 
 export class LBProvider extends EventEmitter {
+    chainId: string;
+    accounts: string[];
+
     constructor() {
         console.log('LBProvider constructor called');
         super();
 
+        this.chainId = '0x1'; // Mainnet
+        this.accounts = [];
         PROVIDER = this;
-
-        PROVIDER.chainId = '0x1'; // Mainnet
-        PROVIDER.accounts = [];
     }
-
-    [key: string]: unknown;
 
     // Mock request method to handle RPC calls
     async request({ method, params }) {

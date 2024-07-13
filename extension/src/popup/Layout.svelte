@@ -37,5 +37,6 @@
         max-height: 100%;
         position: relative;
         vertical-align: middle;
+        border-radius: 2rem;
     }
 </style>
