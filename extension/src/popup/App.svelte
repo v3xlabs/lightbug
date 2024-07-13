@@ -3,7 +3,6 @@
     import Portfolio from "./portfolio/Portfolio.svelte";
     import "../app.css";
     import Wallets from "./Wallets.svelte";
-    Wallets;
 
     const addresses = ["0x8F8f07b6D61806Ec38febd15B07528dCF2903Ae7"];
 
