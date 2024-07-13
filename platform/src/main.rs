@@ -11,6 +11,7 @@ use esp_idf_hal::gpio::{AnyInputPin, AnyOutputPin, PinDriver, Pull};
 use esp_idf_hal::spi::SpiDriver;
 use esp_idf_hal::spi::{self, *};
 use esp_idf_hal::units::Hertz;
+use mipidsi::options::ColorInversion;
 use mipidsi::{models, Builder};
 
 use esp_idf_hal::{delay::FreeRtos, peripherals::Peripherals};
@@ -75,6 +76,7 @@ fn main() -> Result<(), EspError> {
 
     let mut display = Builder::new(models::ST7789, di)
         .reset_pin(rst)
+        .invert_colors(ColorInversion::Inverted)
         .init(&mut delay)
         .unwrap();
 
@@ -88,6 +90,8 @@ fn main() -> Result<(), EspError> {
         .into_styled(style)
         .draw(&mut display)
         .unwrap();
+
+    display.clear(Rgb565::CSS_HOT_PINK).unwrap();
 
     let mut button1 = PinDriver::input(peripherals.pins.gpio10).unwrap();
     button1.set_pull(Pull::Up).unwrap();
@@ -112,28 +116,19 @@ fn main() -> Result<(), EspError> {
 
     loop {
         // check button 1
-        let mut pixels = vec![off.clone(), off.clone(), off.clone(), off.clone()];
         if button1.is_low() {
             log::info!("[keypress] btn 1");
-            // pixels[0] = red.de.clone();
-            pixels[0] = RED;
         }
         if button2.is_low() {
             log::info!("[keypress] btn 2");
-            // pixels[1] = red.clone();
-            pixels[1] = GREEN;
         }
         if button3.is_low() {
             log::info!("[keypress] btn 3");
-            // pixels[2] = red.clone();
-            pixels[2] = GREEN;
         }
         if button4.is_low() {
             log::info!("[keypress] btn 4");
-            // pixels[3] = red.clone();
-            pixels[3] = GREEN;
         }
-        ws2812.write_nocopy(pixels).unwrap();
+        // ws2812.write_nocopy(pixels).unwrap();
 
         FreeRtos::delay_ms(100);
     }
