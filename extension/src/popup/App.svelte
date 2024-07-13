@@ -1,6 +1,6 @@
 <script lang="ts">
     import { writable } from "svelte/store";
-    import Portfolio from "../portfolio/Portfolio.svelte";
+    import Portfolio from "./portfolio/Portfolio.svelte";
 
     const connected = true;
     // intro > choose-device > choose wallet > wallet page
@@ -8,14 +8,14 @@
     const page = writable<pages>("intro");
 </script>
 
-<main class="p-8 min-w-96">
+<main class="p-8 min-w-96 bg-yellow-100">
     {#if $page === "intro"}
         <h1 class="text-2xl">Welcome to Lightbug</h1>
         <button on:click={()=>{
             page.set("choose-device")
         }}>Next</button>
     {:else if $page === "choose-device"}
-        <h1 class="text-2xl">Choose your device</h1>
+        <h1 class="text-2xl">Choose your device</h1>    
         <button on:click={()=>{
             page.set("choose-wallet")
         }}>Next</button>
@@ -28,3 +28,9 @@
         <Portfolio />
     {/if}
 </main>
+
+<style>
+    :global(body) {
+        min-width: 300px;
+    }
+</style>
