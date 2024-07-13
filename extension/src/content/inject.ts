@@ -1,6 +1,6 @@
 import { announceProvider } from 'mipd';
 import { LBProvider } from './provider';
-import icon from '../public/icons/injected.svg';
+import icon from '../../public/icons/injected.svg';
 
 const lightBugProvider = new LBProvider();
 const providerDetail = {
