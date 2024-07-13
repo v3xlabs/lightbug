@@ -1,5 +1,6 @@
 <script lang="ts">
     import "../app.css";
+    import GoLink from "svelte-icons/go/GoLink.svelte";
 
     import { serialManager, serialManagerStatus } from "../popup/SerialManager";
 
@@ -15,15 +16,22 @@
 </script>
 
 <main>
-    <h1></h1>
-    <p>Current Serial Status: {$serialManagerStatus}</p>
-
+    <div class="border rounded-md h-fit flex items-center">
+        <span class="p-2 border-r">
+            <div class="w-4 h-4">
+                <GoLink />
+            </div>
+        </span>
+        <span class="p-1">
+            {$serialManagerStatus}
+        </span>
+    </div>
     {#if $serialManagerStatus === "disconnected"}
         <div class="my-auto">
-            <h1 class="text-3xl my-2">Connect your FireFly to continue</h1>
+            <h1 class="text-xl text-bold my-2">Connect your FireFly to continue</h1>
 
             <!-- or if it's already connected, try pairing it -->
-            <p class="text-lg mb-2">
+            <p class="text-base mb-2">
                 Or if it's already connected, try pairing it by clicking the
                 button below
             </p>
@@ -31,7 +39,7 @@
                 on:click={pairFireFly}
                 class="px-4 py-2 bg-purple-800 text-white rounded-lg"
             >
-                Connect FireFly
+                Connect Device
             </button>
         </div>
     {:else}
@@ -47,12 +55,11 @@
 
 <style>
     main {
-        text-align: center;
         padding: 1em;
         margin: 0 auto;
-    }
-    h1 {
-        color: #ff3e00;
-        font-size: 4em;
+        max-width: 420px;
+        width: 100%;
+
+        @apply space-y-2;
     }
 </style>

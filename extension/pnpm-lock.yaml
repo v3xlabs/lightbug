@@ -20,6 +20,9 @@ importers:
       mipd:
         specifier: ^0.0.7
         version: 0.0.7(typescript@5.5.3)
+      svelte-icons:
+        specifier: ^2.1.0
+        version: 2.1.0
       svelte-spa-router:
         specifier: ^4.0.1
         version: 4.0.1
@@ -2039,6 +2042,9 @@ packages:
     engines: {node: ^12.20 || ^14.13.1 || >= 16}
     peerDependencies:
       svelte: ^3.19.0 || ^4.0.0
+
+  svelte-icons@2.1.0:
+    resolution: {integrity: sha512-rHPQjweEc9fGSnvM0/4gA3pDHwyZyYsC5KhttCZRhSMJfLttJST5Uq0B16Czhw+HQ+HbSOk8kLigMlPs7gZtfg==}
 
   svelte-spa-router@4.0.1:
     resolution: {integrity: sha512-2JkmUQ2f9jRluijL58LtdQBIpynSbem2eBGp4zXdi7aDY1znbR6yjw0KsonD0aq2QLwf4Yx4tBJQjxIjgjXHKg==}
@@ -4849,6 +4855,8 @@ snapshots:
   svelte-hmr@0.16.0(svelte@4.2.18):
     dependencies:
       svelte: 4.2.18
+
+  svelte-icons@2.1.0: {}
 
   svelte-spa-router@4.0.1:
     dependencies:
