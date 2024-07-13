@@ -6,7 +6,14 @@
     // intro > choose-device > choose wallet > wallet page
     type pages = "intro" | "choose-device" | "choose-wallet" | "wallet-page";
     const page = writable<pages>("intro");
-    import '../app.css'
+    import "../app.css";
+
+    let message = "hello";  
+    
+    chrome.runtime.sendMessage({ action: "requestInfo", lightbug: true }, (response) => {
+        console.log("Popup Info got response", response);
+        message = JSON.stringify(response);
+    });
 </script>
 
 <main class="p-8 min-w-96">
@@ -17,6 +24,7 @@
                 page.set("choose-device");
             }}>Next</button
         >
+        <p id="message">{message}</p>
     {:else if $page === "choose-device"}
         <h1 class="text-2xl">Choose your device</h1>
         <button

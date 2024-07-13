@@ -6,9 +6,7 @@ export class LBProvider extends EventEmitter {
         console.log('LBProvider constructor called');
         super();
 
-        // this.isMock = true;
         this.chainId = '0x1'; // Mainnet
-        // this.accounts = ['0x0000000000000000000000000000000000000000']; // Mock account
         this.accounts = [];
     }
 
@@ -21,8 +19,7 @@ export class LBProvider extends EventEmitter {
             case 'eth_requestAccounts':
                 console.log('eth_requestAccounts called');
                 // artificial 5 second wait
-                window.postMessage({ action: 'openPopup' }, '*');
-
+                window.postMessage({ action: 'openPopup', isLightBug: true }, '*');
                 await new Promise(resolve => setTimeout(resolve, 5000));
                 this.accounts = ['0x0000000000000000000000000000000000000000']; // Mock account
                 return this.accounts;
