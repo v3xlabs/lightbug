@@ -2,13 +2,17 @@ import { EventEmitter } from 'events';
 import { createStore } from 'mipd';
 import type { Address } from 'viem';
 
+let PROVIDER: LBProvider;
+
 export class LBProvider extends EventEmitter {
     constructor() {
         console.log('LBProvider constructor called');
         super();
 
-        this.chainId = '0x1'; // Mainnet
-        this.accounts = [];
+        PROVIDER = this;
+
+        PROVIDER.chainId = '0x1'; // Mainnet
+        PROVIDER.accounts = [];
     }
 
     [key: string]: unknown;
@@ -22,7 +26,7 @@ export class LBProvider extends EventEmitter {
                 // artificial 5 second wait
                 window.postMessage({ action: 'lb_open_wallet' }, '*');
 
-                this.accounts = await new Promise<string[]>((resolve) => {
+                PROVIDER.accounts = await new Promise<string[]>((resolve) => {
                     // TODO: wait for device info and wallet selection
                     const v = (event) => {
                         if (event.data.action === 'lb_wallet_selected') {
@@ -38,15 +42,17 @@ export class LBProvider extends EventEmitter {
                     const timeout_handle = setTimeout(() => {
                         // timeout
                         window.removeEventListener('message', v);
-                        resolve([]);
+                        // resolve([]);
+                        // TODO: remove this
+                        resolve(['0x0000000000000000000000000000000000000000'])
                     }, timeout);
                     window.addEventListener('message', v);
                 });
 
-                return this.accounts;
+                return PROVIDER.accounts;
             case 'eth_chainId':
                 console.log('eth_chainId called');
-                return this.chainId;
+                return PROVIDER.chainId;
             default:
                 throw new Error(`Unsupported method: ${method}`);
         }
@@ -54,7 +60,7 @@ export class LBProvider extends EventEmitter {
 
     // Mock enable method for compatibility with older dapps
     async enable() {
-        return this.accounts;
+        return PROVIDER.accounts;
     }
 }
 
