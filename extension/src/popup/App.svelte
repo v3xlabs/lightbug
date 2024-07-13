@@ -2,13 +2,16 @@
     import { writable } from "svelte/store";
     import Portfolio from "./portfolio/Portfolio.svelte";
     import "../app.css";
+    import Wallets from "./Wallets.svelte";
+    Wallets;
 
-    const connected = true;
+    const addresses = ["0x8F8f07b6D61806Ec38febd15B07528dCF2903Ae7"];
+
     // intro > choose-device > choose wallet > wallet page
     type pages = "intro" | "choose-device" | "choose-wallet" | "wallet-page";
-    const page = writable<pages>("intro");
+    const page = writable<pages>("choose-wallet");
 
-        import "../app.css";
+    import "../app.css";
 
     let message = "hello";  
     
@@ -36,12 +39,6 @@
     </div>
     {:else if $page === "choose-wallet"}
         <h1 class="text-2xl">Choose your wallet</h1>
-        <button
-            on:click={() => {
-                page.set("wallet-page");
-            }}>Next</button
-        >
-    {:else if $page === "wallet-page"}
-        <Portfolio />
+        <Wallets addresses={addresses}/>
     {/if}
 </main>
