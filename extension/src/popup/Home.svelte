@@ -3,10 +3,11 @@
     import "../app.css";
     import { serialManager, serialManagerStatus } from "./SerialManager";
     import clsx from "clsx";
+    import { activeWallet } from './DeviceConnector';
 
     // const wallet = "0x225f137127d9067788314bc7fcc1f36746a3c3B5";
     // const wallet = "0xd577D1322cB22eB6EAC1a008F62b18807921EFBc";
-    const wallet = "0x8F8f07b6D61806Ec38febd15B07528dCF2903Ae7";
+    // const wallet = "0x8F8f07b6D61806Ec38febd15B07528dCF2903Ae7";
 
     let profile:
         | undefined
@@ -19,7 +20,7 @@
         return data;
     };
 
-    fetchENS(wallet).then(console.log);
+    $: fetchENS($activeWallet).then(console.log);
 
     // chrome.runtime.sendMessage({ action: "lb_request_device" }, (response) => {
     //     console.log("Received device info", response);
@@ -62,7 +63,7 @@
         <div>
             <h1 class="text-xl py-2">
                 Hello <span class="font-bold"
-                    >{profile?.name ?? formatAddress(wallet)}</span
+                    >{profile?.name ?? formatAddress($activeWallet)}</span
                 >
             </h1>
         </div>
@@ -77,6 +78,10 @@
             href="#/portfolio"
             class="px-4 py-2 bg-purple-800 text-white rounded-lg">Portfolio</a
         >
+        <a
+            href="#/transactions"
+            class="px-4 py-2 bg-green-800 text-white rounded-lg">Transactions
+        </a>
     </div>
 
     <!-- <button on:click={pairFireFly}>Pair FireFly</button> -->

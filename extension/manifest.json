@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "LightBug Connector",
     "version": "0.0.1",
-    "permissions": ["tabs", "serial"],
+    "permissions": ["tabs", "serial", "storage"],
     "icons": {
       "128": "icons/icon128.png"
     },

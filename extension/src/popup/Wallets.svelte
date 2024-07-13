@@ -1,6 +1,8 @@
 <script lang="ts">
-    let addresses: string[] = ["0x8F8f07b6D61806Ec38febd15B07528dCF2903Ae7"];
     import {formatAddress} from "ens-tools"
+    import { activeWallet, deviceConnector, wallets } from './DeviceConnector';
+    import clsx from "clsx";
+    import { pop } from 'svelte-spa-router'
     // const getData = async () => {
     //     const url = new URL("https://enstate.rs/bulk/a");
 
@@ -16,17 +18,22 @@
     // console.log(data);
 </script>
 
+<button class="w-full" on:click={pop}>Back</button>
+
 <h1 class="text-2xl">Choose your wallet</h1>
+
+<button class="w-full" on:click={deviceConnector.setMockValues}>Set Mock</button>
+
 
 <ul>
     <!-- {#await data}
         <li>Loading...</li>
     {:then data} -->
-        {#each addresses as address}
-        <button class="w-full" on:click={console.log}>
-            <li class="border border-neutral-400 p-2 my-2 rounded-lg w-full">
+        {#each $wallets as address}
+        <button class="w-full" on:click={() => deviceConnector.setActiveWallet(address)}>
+            <li class={clsx("border border-neutral-400 p-2 my-2 rounded-lg w-full", address === $activeWallet ? "!border-yellow-600 border-2" : "")}>
                 <div>
-                    <div class=" flex flex-row">
+                    <div class="flex flex-row">
                         <div class="bg-yellow-600 size-14">
                         </div>
                         <div class="mx-2 flex flex-col">

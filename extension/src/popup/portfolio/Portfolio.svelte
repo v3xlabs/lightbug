@@ -1,6 +1,8 @@
 <script lang="ts">
     import { http, createPublicClient, formatEther } from "viem";
     import { mainnet } from "viem/chains";
+    import { activeWallet } from "../DeviceConnector";
+    import { pop } from 'svelte-spa-router'
 
     export const publicClient = createPublicClient({
         chain: mainnet,
@@ -8,17 +10,19 @@
     });
 
     const balance = publicClient.getBalance({
-        address: "0x8F8f07b6D61806Ec38febd15B07528dCF2903Ae7",
+        address: $activeWallet as any,
     });
 
     let address = "0x8F8f07b6D61806Ec38febd15B07528dCF2903Ae7";
     const fetchData = async () => {
         const response = await fetch(
-            `https://eth.blockscout.com/api/v2/addresses/${address}/tokens?type=ERC-20`,
+            `https://eth.blockscout.com/api/v2/addresses/${$activeWallet}/tokens?type=ERC-20`,
         );
         return await response.json();
     };
 </script>
+
+<button class="" on:click={pop}>Back</button>
 
 {#await fetchData() then fetchData}
     <h1 class="text-2xl">Portfolio</h1>

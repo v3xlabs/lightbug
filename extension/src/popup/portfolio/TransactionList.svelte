@@ -1,22 +1,25 @@
 <script lang="ts">
     import { formatAddress } from "ens-tools";
     import { formatEther } from "viem";
+    import { activeWallet } from '../DeviceConnector';
+    import { pop } from 'svelte-spa-router';
 
-        let address = "0x8F8f07b6D61806Ec38febd15B07528dCF2903Ae7";
     const fetchData = async () => {
         const response = await fetch(
-            `https://eth.blockscout.com/api/v2/addresses/${address}/transactions`,
+            `https://eth.blockscout.com/api/v2/addresses/${$activeWallet}/transactions`,
         );
         return await response.json();
     };
 </script>
+<button class="" on:click={pop}>Back</button>
+
 {#await fetchData() then fetchData}
     <h1 class="text-2xl">Transactions</h1>
 
     <ul>
         {#each fetchData.items as transaction}
             <li class="border border-neutral-400 p-2 my-2 rounded-lg w-full">
-                {formatAddress(transaction.from.ens_name || transaction.from.hash)} - {formatAddress(transaction.to.ens_name || transaction.to.hash)} - {formatEther(transaction.value)}
+                {formatAddress(transaction.from?.ens_name || transaction.from?.hash || '0x0')} - {formatAddress(transaction.to?.ens_name || transaction.to?.hash || '0x0')} - {formatEther(transaction.value)}
             </li>
         {/each}
     </ul>
