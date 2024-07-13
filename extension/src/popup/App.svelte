@@ -6,9 +6,10 @@
     // intro > choose-device > choose wallet > wallet page
     type pages = "intro" | "choose-device" | "choose-wallet" | "wallet-page";
     const page = writable<pages>("intro");
+    import '../app.css'
 </script>
 
-<main class="p-8 min-w-96 bg-yellow-100">
+<main class="p-8 min-w-96">
     {#if $page === "intro"}
         <h1 class="text-2xl">Welcome to Lightbug</h1>
         <button
@@ -34,17 +35,3 @@
         <Portfolio />
     {/if}
 </main>
-
-<style>
-    :global(html) {
-        width: 420px;
-        height: 420px;
-        background-color: #f5f5f5;
-        min-width: 420px;
-        max-width: 100%;
-        min-height: 420px;
-        max-height: 100%;
-        position: relative;
-        vertical-align: middle;
-    }
-</style>
