@@ -11,9 +11,9 @@
 
     <h1 class="text-2xl">Choose your wallet</h1>
 
-    <button class="w-full" on:click={deviceConnector.setMockValues}
-        >Set Mock</button
-    >
+    <button class="w-full" on:click={deviceConnector.setMockValues}>
+        Set Mock
+    </button>
 
     <ul>
         <!-- {#await data}

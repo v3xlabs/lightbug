@@ -51,6 +51,11 @@ class SerialManager {
             throw new Error("Failed to open port");
         }
 
+        // let write = port.writable!.getWriter();
+        // await write.ready;
+        // write.write(new TextEncoder().encode("hello"));
+        // write.releaseLock();
+
         const decoder = new TextDecoderStream();
 
         this._reader = port.readable!.pipeThrough(decoder).getReader();
@@ -78,7 +83,7 @@ class SerialManager {
         this.status.set("disconnected");
     }
 
-    private async tryOpenPort() {
+    private async   tryOpenPort() {
         if (this._port === null) {
             throw new Error("Serial port not initialized");
         }
