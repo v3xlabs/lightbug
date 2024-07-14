@@ -18,6 +18,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         // console.log(chrome);
         chrome.action.setBadgeText({ text: '1' })
         chrome.action.openPopup();
+        // if openPopup is a function, it will open the popup
+        if (chrome.action.openPopup instanceof Function) {
+            chrome.action.openPopup();
+        }
         setTimeout(() => {
             chrome.tabs.sendMessage(sender.tab?.id, { action: 'updatePopup', message: request.message });
         }, 1000);

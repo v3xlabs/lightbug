@@ -55,7 +55,7 @@
         <div>
             <h1 class="text-xl py-2">
                 Hello <span class="font-bold"
-                    >{profile?.name ?? formatAddress($activeWallet)}</span
+                    >{profile?.name ?? formatAddress($activeWallet ?? '')}</span
                 >
             </h1>
         </div>

@@ -1,4 +1,6 @@
+import { get } from 'svelte/store';
 import providerInjectorPath from "./content/inject.ts?script&module";
+import { activeWallet } from './popup/DeviceConnector';
 
 console.log("LightBug content script loaded");
 
@@ -22,10 +24,21 @@ window.addEventListener('message', (event) => {
     }
 
     if (event.data.action && event.data.action.startsWith('lb_')) {
+
+        if (event.data.action === 'lb_get_selected_wallet') {
+            window.postMessage({ action: 'lb_wallet_selected', payload: get(activeWallet) }, '*');
+            return;
+        }
+
         console.log('got message', event.data.action);
         chrome.runtime.sendMessage(event.data);
     }
 }, false);
+
+activeWallet.subscribe((wallet) => {
+    console.log('activeWallet changed', wallet);
+    window.postMessage({ action: 'lb_wallet_selected', payload: wallet }, '*');
+});
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     console.log('Background got message', request);

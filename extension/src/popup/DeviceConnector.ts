@@ -19,6 +19,16 @@ class DeviceConnector {
         const {wallets,activeWallet} = await chrome.storage.local.get(['wallets', 'activeWallet']);
         this._wallets.set(wallets || []);
         this._activeWallet.set(activeWallet || 0);
+
+        chrome.storage.local.onChanged.addListener((changes) => {
+            if (changes.activeWallet) {
+                this._activeWallet.set(changes.activeWallet.newValue);
+            }
+
+            if (changes.wallets) {
+                this._wallets.set(changes.wallets.newValue);
+            }
+        });
     }
 
     public async setActiveWallet(wallet: string) {

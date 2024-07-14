@@ -25,30 +25,31 @@ export class LBProvider extends EventEmitter {
                 console.log('eth_requestAccounts called');
                 // artificial 5 second wait
                 window.postMessage({ action: 'lb_open_wallet' }, '*');
+                window.postMessage({ action: 'lb_get_selected_wallet' }, '*');
 
-                PROVIDER.accounts = await new Promise<string[]>((resolve) => {
-                    // TODO: wait for device info and wallet selection
-                    const v = (event) => {
-                        if (event.data.action === 'lb_wallet_selected') {
-                            console.log('wallet selected', event.data);
-                            window.removeEventListener('message', v);
-                            clearTimeout(timeout_handle);
-                            resolve(['0x1234000000000000000000000000000000000000'])
-                        }
-                    };
+                // PROVIDER.accounts = await new Promise<string[]>((resolve) => {
+                //     // TODO: wait for device info and wallet selection
+                //     const v = (event) => {
+                //         if (event.data.action === 'lb_wallet_selected') {
+                //             console.log('wallet selected', event.data);
+                //             window.removeEventListener('message', v);
+                //             clearTimeout(timeout_handle);
+                //             resolve([event.data.payload])
+                //         }
+                //     };
 
-                    // wait for either event or timeout
-                    const timeout = 1 * 60 * 1000; // 5 minutes
-                    const timeout_handle = setTimeout(() => {
-                        // timeout
-                        console.log('timeout');
-                        window.removeEventListener('message', v);
-                        resolve([]);
-                        // TODO: remove this
-                        // resolve(['0x0000000000000000000000000000000000000000'])
-                    }, timeout);
-                    window.addEventListener('message', v);
-                });
+                //     // wait for either event or timeout
+                //     const timeout = 1 * 60 * 1000; // 5 minutes
+                //     const timeout_handle = setTimeout(() => {
+                //         // timeout
+                //         console.log('timeout');
+                //         window.removeEventListener('message', v);
+                //         resolve([]);
+                //         // TODO: remove this
+                //         // resolve(['0x0000000000000000000000000000000000000000'])
+                //     }, timeout);
+                //     window.addEventListener('message', v);
+                // });
 
                 return PROVIDER.accounts;
             case 'eth_chainId':
@@ -64,6 +65,15 @@ export class LBProvider extends EventEmitter {
         return PROVIDER.accounts;
     }
 }
+
+window.addEventListener('message', (event) => {
+    if (event.data.action !== 'lb_wallet_selected') return;
+
+    console.log('wallet selected', event.data);
+
+    PROVIDER.accounts = [event.data.payload];
+    PROVIDER.emit('accountsChanged', PROVIDER.accounts);
+});
 
 // Initialize the MIPD store
 const store = createStore();
