@@ -6,7 +6,7 @@
 
     export const publicClient = createPublicClient({
         chain: mainnet,
-        transport: http(),
+        transport: http('https://rpc.ankr.com/eth'),
     });
 
     const balance = publicClient.getBalance({
