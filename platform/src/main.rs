@@ -19,6 +19,7 @@ use esp_idf_hal::gpio::{AnyInputPin, AnyOutputPin, PinDriver, Pull};
 use esp_idf_hal::spi::SpiDriver;
 use esp_idf_hal::spi::{self, *};
 use esp_idf_hal::units::Hertz;
+use image::{ImageBuffer, Rgb};
 use mipidsi::options::ColorInversion;
 use mipidsi::{models, Builder, Display};
 
@@ -164,6 +165,24 @@ fn main() -> Result<(), EspError> {
     }
 }
 
+fn resize_qr_code(qr_matrix: &Vec<Vec<u8>>, new_size: u32) -> ImageBuffer<Rgb<u8>, Vec<u8>> {
+    let old_size = qr_matrix.len() as u32;
+    let mut img = ImageBuffer::new(old_size, old_size);
+
+    for (y, row) in qr_matrix.iter().enumerate() {
+        for (x, &value) in row.iter().enumerate() {
+            let pixel = if value == 0 {
+                Rgb([0, 0, 0])
+            } else {
+                Rgb([255, 255, 255])
+            };
+            img.put_pixel(x as u32, y as u32, pixel);
+        }
+    }
+
+    image::imageops::resize(&img, new_size, new_size, image::imageops::Nearest)
+}
+
 fn draw_qr<'a>(
     display: &mut Display<
         SPIInterface<
@@ -177,10 +196,22 @@ fn draw_qr<'a>(
     let result1: Vec<Vec<bool>> =
         qrcode_generator::to_matrix("https://v3x.fyi/s1", QrCodeEcc::High).unwrap();
 
-    println!("result1: {:?}, {}", result1.len(), result1[0].len());
+    let multiplier = 6;
+    let mut result2: Vec<Vec<bool>> = Vec::new();
+    for i in result1 {
+        let mut result2row: Vec<bool> = Vec::new();
+        for j in i {
+            for _ in 0..multiplier*2 {
+                result2row.push(j);
+            }
+        }
+        for _ in 0..multiplier {
+            result2.push(result2row.clone());
+        }
+    }
 
     // convert the 2d result to a 1d array, and map true to red and false to black
-    let result = result1
+    let result = result2
         .iter()
         .flat_map(|row| {
             row.iter()
@@ -188,13 +219,17 @@ fn draw_qr<'a>(
         })
         .collect::<Vec<u8>>();
 
-    println!("result: {:?}", result);
+    // println!("result: {:?}", result);
 
-    let raw = ImageRaw::<Rgb565, BigEndian>::new(&result, result1.len() as u32);
-    let image = Image::new(&raw, Point::new(50, 50));
+    // let resized_image = resize_qr_code(&result, 240);
+    // let imager = resized_image.iter().as_slice();
+    let raw_image: ImageRaw<Rgb565> = ImageRaw::new(&result, 174);
+    println!("raw_image: {:?}", raw_image.bounding_box());
+    let image: Image<ImageRaw<Rgb565>> = Image::new(&raw_image, Point::new(34, 34));
+    println!("image: {:?}", image.bounding_box());
     image.draw(display).unwrap();
 }
-    //     let result: Vec<Vec<bool>> =
+//     let result: Vec<Vec<bool>> =
 fn draw_unlock_screen<'a>(
     display: &mut Display<
         SPIInterface<
