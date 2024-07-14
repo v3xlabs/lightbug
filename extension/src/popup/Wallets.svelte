@@ -6,14 +6,13 @@
     import { fetchENS } from "./utils/ens";
 </script>
 
-<div class="px-4">
+<div class="px-4 py-4">
+    <h1 class="text-xl">Your Wallets</h1>
     <button class="w-full" on:click={pop}>Back</button>
-
-    <h1 class="text-2xl">Choose your wallet</h1>
-
+<!-- 
     <button class="w-full" on:click={deviceConnector.setMockValues}>
         Set Mock
-    </button>
+    </button> -->
 
     <ul>
         <!-- {#await data}
