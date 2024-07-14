@@ -1,21 +1,15 @@
-<script lang="ts">
+<script lang="ts" async>
     import { formatAddress } from "ens-tools";
     import "../app.css";
     import clsx from "clsx";
     import { activeWallet } from './DeviceConnector';
-
+    import { fetchENS, type TempProfile } from "./utils/ens";
+    
     let profile:
-        | undefined
-        | { name?: string; avatar?: string; header?: string } = undefined;
+    | undefined
+    | TempProfile = undefined;
 
-    const fetchENS = async (address: string) => {
-        const response = await fetch(`https://enstate.rs/a/${address}`);
-        const data = await response.json();
-        profile = data;
-        return data;
-    };
-
-    $: fetchENS($activeWallet).then(console.log);
+    $: fetchENS($activeWallet).then((data) => { profile = data });
 
     chrome.runtime.sendMessage({ action: "lb_request_device", addresses: [activeWallet] });
 </script>
@@ -42,7 +36,7 @@
                     )}
                 >
                     <img
-                        src={profile.avatar}
+                        src={`https://avatarservice.xyz/128/${profile.name}.webp`}
                         alt="avatar"
                         class="object-cover"
                     />
