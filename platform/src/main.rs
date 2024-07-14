@@ -3,6 +3,8 @@ use embedded_graphics::geometry::{Point, Size};
 use embedded_graphics::image::{Image, ImageRaw, ImageRawLE};
 use embedded_graphics::mono_font::ascii::FONT_10X20;
 use embedded_graphics::mono_font::MonoTextStyle;
+use embedded_graphics::pixelcolor::raw::{BigEndian, LittleEndian};
+use embedded_graphics::pixelcolor::BinaryColor;
 use embedded_graphics::primitives::StyledDrawable;
 use embedded_graphics::text::{Alignment, Text};
 use embedded_graphics::{
@@ -138,6 +140,7 @@ fn main() -> Result<(), EspError> {
             }
             if button3.is_low() {
                 log::info!("[keypress] btn 3");
+                draw_qr(&mut display)
             }
             if button4.is_low() {
                 log::info!("[keypress] btn 4");
@@ -171,22 +174,27 @@ fn draw_qr<'a>(
         PinDriver<esp_idf_hal::gpio::Gpio5, esp_idf_hal::gpio::InputOutput>,
     >,
 ) {
-    let result: Vec<Vec<bool>> =
-        qrcode_generator::to_matrix("https://v3x.fyi/s1", QrCodeEcc::Low).unwrap();
+    let result1: Vec<Vec<bool>> =
+        qrcode_generator::to_matrix("https://v3x.fyi/s1", QrCodeEcc::High).unwrap();
+
+    println!("result1: {:?}, {}", result1.len(), result1[0].len());
 
     // convert the 2d result to a 1d array, and map true to red and false to black
-    let result = result
+    let result = result1
         .iter()
         .flat_map(|row| {
             row.iter()
-                .map(|pixel| if *pixel { 0b11101111 } else { 0b0101_0000 })
+                .map(|pixel| if *pixel { 0b0101_0000 } else { 0b11101111 })
         })
         .collect::<Vec<u8>>();
-    let raw = ImageRawLE::new(&result, result.len() as u32);
-    let image = Image::new(&raw, Point::new(0, 0));
+
+    println!("result: {:?}", result);
+
+    let raw = ImageRaw::<Rgb565, BigEndian>::new(&result, result1.len() as u32);
+    let image = Image::new(&raw, Point::new(50, 50));
     image.draw(display).unwrap();
 }
-
+    //     let result: Vec<Vec<bool>> =
 fn draw_unlock_screen<'a>(
     display: &mut Display<
         SPIInterface<
