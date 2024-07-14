@@ -117,30 +117,29 @@ fn main() -> Result<(), EspError> {
     let channel = peripherals.rmt.channel0;
     let mut ws2812 = Ws2812Esp32Rmt::new(channel, led_pin).unwrap();
 
+    display.clear(Rgb565::new(253, 238, 198)).unwrap();
+
     loop {
-        // check button 1
-        if button1.is_low() && button4.is_low() {
-            // confirm
+        if button1.is_low() {
+            log::info!("[keypress] btn 1");
+            pin.clear();
+            should_update_unlock_screen = true;
+        }
+        if button2.is_low() {
+            log::info!("[keypress] btn 2");
             pin.push(active_num);
             should_update_unlock_screen = true;
-        } else {
-            if button1.is_low() {
-                log::info!("[keypress] btn 1");
-                active_num = if active_num == 9 { 0 } else { active_num + 1 };
-                should_update_unlock_screen = true;
-            }
-            if button2.is_low() {
-                log::info!("[keypress] btn 2");
-            }
-            if button3.is_low() {
-                log::info!("[keypress] btn 3");
-            }
-            if button4.is_low() {
-                log::info!("[keypress] btn 4");
-                // decrease active_num by 1, if below 0, add 10 to active_num
-                active_num = if active_num == 0 { 9 } else { active_num - 1 };
-                should_update_unlock_screen = true;
-            }
+        }
+        if button3.is_low() {
+            log::info!("[keypress] btn 3");
+            active_num = if active_num == 9 { 0 } else { active_num + 1 };
+            should_update_unlock_screen = true;
+        }
+        if button4.is_low() {
+            log::info!("[keypress] btn 4");
+            // decrease active_num by 1, if below 0, add 10 to active_num
+            active_num = if active_num == 0 { 9 } else { active_num - 1 };
+            should_update_unlock_screen = true;
         }
 
         if should_update_unlock_screen {
@@ -175,14 +174,11 @@ fn draw_unlock_screen<'a>(
         return;
     }
 
-    display.clear(Rgb565::new(253, 238, 198)).unwrap();
-
     let style = PrimitiveStyleBuilder::new()
-        .stroke_width(1)
-        .fill_color(Rgb565::new(231, 217, 4))
+        .fill_color(Rgb565::new(255, 10, 4))
         .build();
 
-    Rectangle::new(Point::new(0, 210), Size::new(240, 30))
+    Rectangle::new(Point::new(0, 180), Size::new(240, 30))
         .into_styled(style)
         .draw(display)
         .unwrap();
@@ -193,17 +189,15 @@ fn draw_unlock_screen<'a>(
     text.draw(display).unwrap();
 
     let rect_style = PrimitiveStyleBuilder::new()
-        .stroke_width(1)
-        .stroke_color(Rgb565::BLACK)
         .fill_color(Rgb565::BLACK)
         .build();
-    Rectangle::new(Point::new(108, 200), Size::new(24, 40))
+    Rectangle::new(Point::new(108, 170), Size::new(24, 40))
         .draw_styled(&rect_style, display)
         .unwrap();
 
     let active_style = MonoTextStyle::new(&ProFont24Point, Rgb565::WHITE);
     let active_num_str = format!("{}", active_num);
-    let mut active_num_txt = Text::new(&active_num_str, Point::new(120, 230), active_style);
+    let mut active_num_txt = Text::new(&active_num_str, Point::new(120, 200), active_style);
     active_num_txt.text_style.alignment = Alignment::Center;
     active_num_txt.draw(display).unwrap();
 
@@ -228,15 +222,15 @@ fn draw_unlock_screen<'a>(
         // multiply i by 5 to get the x position
         let current_num_x: i32 = 120 + (i as i32 * 20);
         let mut current_num_txt =
-            Text::new(&current_num_str, Point::new(current_num_x, 230), style);
+            Text::new(&current_num_str, Point::new(current_num_x, 200), style);
         current_num_txt.text_style.alignment = Alignment::Center;
         current_num_txt.draw(display).unwrap();
     }
 
     // Draw Code Progress
-    let code_field_width = 10;
+    let code_field_width = 16;
     let code_field_height = 24;
-    let code_field_spacing = 4;
+    let code_field_spacing = 8;
 
     let box_style = PrimitiveStyleBuilder::new()
         .fill_color(Rgb565::CSS_GRAY)
@@ -260,20 +254,74 @@ fn draw_unlock_screen<'a>(
         .unwrap();
     }
 
+    let helper_rect_style_1 = PrimitiveStyleBuilder::new()
+        .fill_color(Rgb565::CSS_LIGHT_SKY_BLUE)
+        .build();
+
+    Rectangle::new(Point::new(0, 210), Size::new(240, 30))
+        .into_styled(helper_rect_style_1)
+        .draw(display)
+        .unwrap();
+
+    let text_style = MonoTextStyle::new(&ProFont24Point, Rgb565::BLACK);
+
+    Text::with_alignment("<", Point::new(30, 235), text_style, Alignment::Center)
+        .draw(display)
+        .unwrap();
+    Text::with_alignment(">", Point::new(90, 235), text_style, Alignment::Center)
+        .draw(display)
+        .unwrap();
+
+    let helper_rect_style_2 = PrimitiveStyleBuilder::new()
+        .fill_color(Rgb565::CSS_LIME_GREEN)
+        .build();
+
+    Rectangle::new(Point::new(120, 210), Size::new(60, 30))
+        .into_styled(helper_rect_style_2)
+        .draw(display)
+        .unwrap();
+
+    Text::with_alignment("Y", Point::new(150, 235), text_style, Alignment::Center)
+        .draw(display)
+        .unwrap();
+
+    let helper_rect_style_3 = PrimitiveStyleBuilder::new()
+        .fill_color(Rgb565::CSS_RED)
+        .build();
+
+    Rectangle::new(Point::new(180, 210), Size::new(60, 30))
+        .into_styled(helper_rect_style_3)
+        .draw(display)
+        .unwrap();
+
+    Text::with_alignment("N", Point::new(210, 235), text_style, Alignment::Center)
+        .draw(display)
+        .unwrap();
+
     // Update LEDs
     let off = hsv2rgb(Hsv {
         hue: 0,
         sat: 0,
         val: 0,
     });
-    let green = hsv2rgb(Hsv {
+    let blue = hsv2rgb(Hsv {
         hue: 120,
+        sat: 255,
+        val: 50,
+    });
+    let green = hsv2rgb(Hsv {
+        hue: 220,
+        sat: 255,
+        val: 50,
+    });
+    let red = hsv2rgb(Hsv {
+        hue: 20,
         sat: 255,
         val: 50,
     });
     // let pixels = vec![green, off, off, green];
     // let pixels = std::iter::repeat(green).take(4);
-    let pixels = vec![green, off, off, green];
+    let pixels = vec![green, red, blue, blue];
 
     ws2812.write_nocopy(pixels).unwrap();
 }
