@@ -179,7 +179,7 @@ fn draw_unlock_screen<'a>(
 
     let style = PrimitiveStyleBuilder::new()
         .stroke_width(1)
-        .fill_color(Rgb565::new(231, 217, 154))
+        .fill_color(Rgb565::new(231, 217, 4))
         .build();
 
     Rectangle::new(Point::new(0, 210), Size::new(240, 30))
